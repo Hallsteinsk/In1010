@@ -1,3 +1,5 @@
+//Program som tester resepter
+
 //Imports
 import java.util.ArrayList;
 
@@ -10,6 +12,7 @@ class TestResept{
   private static ArrayList<Integer>  pasientIdListe = new ArrayList<Integer>();
   private static ArrayList<Integer> reitListe = new ArrayList<Integer>();
   private static ArrayList<Resept> reseptListe = new ArrayList<Resept>();
+  private static ArrayList<Double> prisAaBetaleListe = new ArrayList<Double>();
 
   //MAIN
   public static void main(String[] args){
@@ -19,6 +22,7 @@ class TestResept{
     leggTilLeger();
     leggTilPasientId();
     leggTilReit();
+    leggTilPrisAaBetale();
 
     //Benytter verdiene og objektene i listene over til aa opprette resepter som legges inn i en ArrayList
     leggTilResepter();
@@ -46,6 +50,7 @@ class TestResept{
     testReseptId(resept.hentId(), indeks);
     testLegemiddelNavn(resept.hentLegemiddel().hentNavn(), indeks);
     testLegemiddelPris(resept.hentLegemiddel().hentPris(), indeks);
+    testPrisAaBetale(resept.prisAaBetale(), indeks);
     testLegemiddelVirkestoff(resept.hentLegemiddel().hentVirkestoff(), indeks);
     testLegeNavn(resept.hentLege().hentNavn(), indeks);
     testPasientId(resept.hentPasientId(), indeks);
@@ -86,7 +91,7 @@ class TestResept{
   // @param int faktisk er den faktiske verdien til resept-ID
   // @param int indeks angir hvilken ID-nummer vi kan forvente.
   public static void testReseptId(int faktisk, int indeks){
-    int forventet = indeks + 1;
+    int forventet = indeks;
     if(faktisk == forventet){
       System.out.println("Reseptens ID er riktig");
     }else{
@@ -154,6 +159,18 @@ class TestResept{
     }
   }
 
+  //Prosedyre som tester at prisen man maa betale er riktig
+  // @param double faktisk er den faktiske prisen
+  // @param in indeks bestemmer hvor i pasientIdListe vi finner fasiten
+  private static void testPrisAaBetale(double faktisk, int indeks){
+    double forventet = prisAaBetaleListe.get(indeks);
+    if(faktisk == forventet){
+      System.out.println("Pris aa betale er riktig");
+    }else{
+      System.out.println(String.format("Pris aa betale er feil. Forventet %.2f, men fikk %.2f", forventet, faktisk));
+    }
+  }
+
   //Prosedyre som tester at reseptens reit er riktig
   //Logikk som haandterer at maks antall reit i P-resept ligger i prosedyren testResept
   // @param int faktisk er den faktiske reit til resepten
@@ -209,6 +226,15 @@ class TestResept{
     reitListe.add(5);
   }
 
+  //Prosedyre som legger inn den prisen man maa betale for et legemiddel basert paa type resept
+  public static void leggTilPrisAaBetale(){
+    prisAaBetaleListe.add(0.0);
+    prisAaBetaleListe.add(784.0);
+    prisAaBetaleListe.add(120.0);
+    prisAaBetaleListe.add(50.0);
+  }
+
+
   //Prosedyre som legger til resepter i reseptListe. Det blir lagt til en av hver type (subklasse) resept
   //Reseptene henter Legemiddel, Lege, pasient-ID, og reit fra henholdsvis legemiddelListe, legeListe, pasientIdListe, og reitListe
   public static void leggTilResepter(){
@@ -221,4 +247,8 @@ class TestResept{
     i++;
     reseptListe.add(new BlaaResept(legemiddelListe.get(i), legeListe.get(i), pasientIdListe.get(i), reitListe.get(i)));
   }
+
+
+
+
 }

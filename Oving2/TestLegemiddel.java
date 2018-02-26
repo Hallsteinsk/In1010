@@ -1,3 +1,6 @@
+
+/*Program som tester de tre underkallsene av legemiddel*/
+
 class TestLegemiddel{
 
   public static void main(String[] args){
@@ -9,15 +12,15 @@ class TestLegemiddel{
 
     //Benytter testprosedyre for aa teste legemiddelobjektene
     System.out.println("Test av legemiddel A");
-    testLegemiddel(legemiddelA, 1, "Ibumetin", 80, 800, 4);
+    testLegemiddel(legemiddelA, 0, "Ibumetin", 80, 800, 4);
     System.out.println(" ");
 
     System.out.println("Test av legemiddel B");
-    testLegemiddel(legemiddelB, 2, "Paracet", 37, 400, 3);
+    testLegemiddel(legemiddelB, 1, "Paracet", 37, 400, 3);
     System.out.println(" ");
 
     System.out.println("Test av legemiddel C");
-    testLegemiddel(legemiddelC, 3, "Sannasol", 50, 3, 0);
+    testLegemiddel(legemiddelC, 2, "Sannasol", 50, 3, 0);
     System.out.println(" ");
   }
 

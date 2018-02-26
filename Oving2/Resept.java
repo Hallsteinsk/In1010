@@ -13,8 +13,8 @@ abstract class Resept{
 
   //Constructor
   public Resept(Legemiddel legemiddel, Lege utskrivendeLege, int pasientId, int reit){
-    antall++;
     ID = antall;
+    antall++;
     this.legemiddel = legemiddel;
     this.utskrivendeLege = utskrivendeLege;
     this.pasientId = pasientId;
