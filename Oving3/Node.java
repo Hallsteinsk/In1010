@@ -5,8 +5,8 @@ Disse kan manipuleres med getters og setters.
 
 class Node<T>{
   //Private variabler
-  private Node neste;
-  public T data;
+  private Node<T> neste;
+  private T data;
 
   //Constructor
   public Node(T data){
@@ -24,7 +24,7 @@ class Node<T>{
 
   //Metode for aa hente ut referansen til neste Node.
   // @return Node som er den neste noden i rekka
-  public Node neste(){
+  public Node<T> neste(){
     return neste;
   }
 
@@ -36,7 +36,7 @@ class Node<T>{
 
   //Metode som gir refernse til den neste noden i listen
   // @param Node neste er den neste noden
-  public void settNeste(Node neste){
+  public void settNeste(Node<T> neste){
     this.neste = neste;
   }
 }

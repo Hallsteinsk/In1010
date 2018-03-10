@@ -8,8 +8,8 @@ sterkt innspirert av IN1010 slides uke 6.
 class Lenkeliste<T> implements Liste<T>{
 
   //Private variabler
-  private Node<T> start;
-  private int antallNoder;
+  protected Node<T> start;
+  protected int antallNoder;
 
   //Constructor
   public Lenkeliste(){

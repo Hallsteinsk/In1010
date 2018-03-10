@@ -40,6 +40,7 @@ public class TestSortertLenkeliste {
         liste.leggTil("A");
         liste.leggTil("D");
         liste.leggTil("B");
+
         sjekk(4, liste.stoerrelse(), "stoerrelse() i liste med 4 elementer");
         sjekk("A", liste.hent(0), "hent(0) i liste med 4 elementer");
         sjekk("B", liste.hent(1), "hent(1) i liste med 4 elementer");
