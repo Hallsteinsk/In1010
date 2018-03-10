@@ -29,6 +29,9 @@ class Lenkeliste<T> implements Liste<T>{
   // @param int pos er plasseringen til den nye noden
   // @param T x er dataen som skal lagres i den nye noden
   public void leggTil(int pos, T x){
+    if(pos > antallNoder || pos < 0){
+      throw new UgyldigListeIndeks(pos);
+    }
     //Oppretter en referanse til start
     Node<T> node = start;
     //"Blar"  gjennom listen for aa komme fram til riktig posisjon
@@ -63,6 +66,9 @@ class Lenkeliste<T> implements Liste<T>{
   // @param int pos er posisjonen til den nye dataen
   // @param T x er dataen som skal legges til
   public void sett(int pos, T x){
+    if(pos + 1 > antallNoder || antallNoder == 0 || pos < 0){
+      throw new UgyldigListeIndeks(pos);
+    }
     //Lager referanse til den foerste noden
     Node<T> node = start.neste();
     //"Blar"  gjennom lenken for aa komme til den noden som skal faa ny data
@@ -77,6 +83,12 @@ class Lenkeliste<T> implements Liste<T>{
   // @param int pos er posisjonen i listen man skal hente data fra.
   // @return T dataen til noden
   public T hent(int pos){
+    if(antallNoder == 0){
+      throw new UgyldigListeIndeks(-1);
+    }
+    if(pos + 1 > antallNoder || pos < 0){
+      throw new UgyldigListeIndeks(pos);
+    }
     //Lager en referanse til den foerste noden
     Node<T> node = start.neste();
     for(int i = 0; i < pos; i++){
@@ -89,6 +101,13 @@ class Lenkeliste<T> implements Liste<T>{
   // @param int pos er nodens plassering i listen
   // @return T er dataen som er lagret i noden
   public T fjern(int pos){
+    //Haandterer ugyldig pos
+    if(antallNoder == 0){
+      throw new UgyldigListeIndeks(-1);
+    }
+    if(pos + 1 > antallNoder || pos < 0){
+      throw new UgyldigListeIndeks(pos);
+    }
     //Lager en referanse til starten av listen
     Node<T> node = start;
     //"Blar" gjennom listen for aa komme til noden foer den som skal slettes
@@ -108,6 +127,9 @@ class Lenkeliste<T> implements Liste<T>{
   //Metode som fjerner den foerste noden, og retunerer dataen til noden
   // @return T dataen som er lagret i noden
   public T fjern(){
+    if(antallNoder == 0){
+      throw new UgyldigListeIndeks(-1);
+    }
     Node<T> node = start.neste();
     start.settNeste(node.neste());
     antallNoder--;

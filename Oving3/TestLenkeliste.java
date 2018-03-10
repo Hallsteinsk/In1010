@@ -9,7 +9,7 @@ public class TestLenkeliste {
         testLeggTilOgFjerningAvFlereElementer();
         testLeggTilPaaIndeks();
         testFjernOgSettMedIndeks();
-        //testUnntak();
+        testUnntak();
         System.out.println("\n"+ antallTester + " tester ferdig");
         System.out.println(antallPasserte + " passerte, " + antallFeil + " feil");
     }
@@ -85,7 +85,7 @@ public class TestLenkeliste {
         sjekk("NyttElement", liste.hent(3), "hent(3) skal hente nytt element lagt til etter at andre elementer har blitt fjernet");
         sjekk(4, liste.stoerrelse(), "stoerrelse() etter flere kall paa fjern() og leggTil()");
     }
-    /*
+
     static void testUnntak() {
         System.out.println("\nTest unntak");
         Liste<String> liste = new Lenkeliste<String>();
@@ -182,7 +182,7 @@ public class TestLenkeliste {
         } catch(UgyldigListeIndeks e) {
             sjekkPasserte();
         }
-    }*/
+    }
 
     static void sjekk(Object forventet, Object faktisk, String testmelding) {
         if (forventet.equals(faktisk)) {
