@@ -8,6 +8,8 @@ class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
       super();
   }
 
+  //Interface:
+
   //Metode som legger til et nytt element i listen. Denne metoden legger elementet
   //inn paa riktig plass. Det minste  elementet er foerst, og det stoerste til slutt.
   // @param T x er dataen som skal legges til listen.
@@ -23,18 +25,18 @@ class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
     }else{
       //Blar gjennom alle elementer og finner den nye nodens plass
       for(int i=0; i<this.stoerrelse(); i++){
-        Node<T> nesteNode = node.neste();
-        if(x.compareTo(nesteNode.hent()) < 0){
-          nyNode.settNeste(nesteNode);
+        if(x.compareTo(node.neste().hent()) < 0){
+          nyNode.settNeste(node.neste());
           node.settNeste(nyNode);
           break;
         }else{
-          node = nesteNode;
+          node = node.neste();
         }
       }
       //Det nye elementet er stoerre en alle i lista. Den nye noden settes bakerst
       node.settNeste(nyNode);
     }
+    //Oeker antallet noder.
     antallNoder++;
   }
 
@@ -50,15 +52,20 @@ class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
     for(int i=0; i<this.stoerrelse()-1; i++){
       node = node.neste();
     }
+    //reduserer antallet noder, og returnerer dataen i noden som blir slettet.
     antallNoder--;
     return node.hent();
   }
 
+  //Metode som overskriver grensesnittet for aa hindre at man setter inne et
+  //element paa et vilkaarlig sted. Dermed forblir listen sortert.
   @Override
   public void sett(int pos, T x){
     throw new UnsupportedOperationException();
   }
 
+  //Metode som overskriver grensesnittet for aa hindre at man setter inne et
+  //element paa et vilkaarlig sted. Dermed forblir listen sortert.
   @Override
   public void leggTil(int pos, T x){
     throw new UnsupportedOperationException();

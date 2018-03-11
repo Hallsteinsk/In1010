@@ -13,7 +13,7 @@ class Lenkeliste<T> implements Liste<T>{
 
   //Constructor
   public Lenkeliste(){
-    start = new Node(null);
+    start = new Node<T>(null);
     antallNoder = 0;
   }
 
