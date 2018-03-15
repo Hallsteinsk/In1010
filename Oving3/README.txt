@@ -19,6 +19,8 @@ Stabel utvider, lenkelisten og tilbyr de samme metodene. Likevel er det leggPaa 
 Den sorteret lenkelisten tar bort muligheten for å bestmme hvor man skal legge neste node. Den blir 
 plassert inn basert på størrelsen til dataen. Minst elementer leggs først, og størts bakerst. Her ble koden litt rotete når man skal smette inn en ny node mellom to nye, men det ser ut til å fungere.  
 
+I klassene Stabel og SortertLenkeliste kunne det vært nyttig å ha en peker til den bakerste noden. Da slipper man å bla gjennom hele listen for å poppe stacken eller sjekke om det nye objektet er større enn alle i listen. Men jeg var veldig usikker på om det var meningen å benytte en dobbellenket liste... Det var i såfall den eneste måten jeg så at jeg kunne løse dette praktisk på. Så jeg lot være å implementere det. I tillegg skulle taAv() benytte interfacet, og da ville ikke det kravet blitt oppfylt om jeg løste det på en annen måte.
+
 Den nye typen unntak "UgyldigListeIndeks" blir kastet dersom man prøver å benytte en indeks som ikke eksisterer i listen. 
 
 Jeg benyttet testene som fulgte med øvingen og alle listene har bestått disse. 
