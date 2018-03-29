@@ -57,7 +57,7 @@ abstract class Resept{
 
   // @return pasientens ID
   public int hentPasientId(){
-    return pasientId;
+    return p.hentId();
   }
 
   // @return reit (antal ganger resepten kan brukes.)

@@ -15,4 +15,16 @@ class Pasient{
     this.id = antall;
     antall++;
   }
+
+  //Getters
+
+  public int hentId(){
+    return id;
+  }
+
+  //Setters
+
+  public void leggTilResept(Resept resept){
+    reseptStabel.leggPaa(resept);
+  }
 }
