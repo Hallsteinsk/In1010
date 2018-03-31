@@ -8,19 +8,26 @@ class TestLege{
     testReseptlisten();
 
 
-
-
-
   }
 
   public static void testReseptlisten(){
     Lege paus = new Lege("Dr.Paus");
     System.out.println("Skriver ut en tom liste:");
     paus.skrivUtResepter();
+
     System.out.println("Legger til resepter");
-    Pasient pasient = new Pasient("pas", 123);
+    Pasient pasient = new Pasient("pas", "123");
     Legemiddel legemiddel = new LegemiddelC("Ibux", 30, 400);
-    paus.leggTilResept(new Resept())
+    paus.leggTilResept(new BlaaResept(legemiddel, paus, pasient, 4));
+    Pasient pasient2 = new Pasient("pas2", "456");
+    Legemiddel legemiddel2 = new LegemiddelC("Paracet", 40, 500);
+    paus.leggTilResept(new BlaaResept(legemiddel2, paus, pasient2, 2));
+    Pasient pasient3 = new Pasient("pas3", "789");
+    Legemiddel legemiddel3 = new LegemiddelC("LM3", 50, 800);
+    paus.leggTilResept(new BlaaResept(legemiddel3, paus, pasient3, 4));
+
+    System.out.println("Skriver ut liste med 3 resepter");
+    paus.skrivUtResepter();
   }
 
   public static void testSortering(){

@@ -13,12 +13,16 @@ abstract class Resept{
 
   //Constructor
   public Resept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient p, int reit){
+    //Instansierer locale variabler og objekter
     ID = antall;
     antall++;
     this.legemiddel = legemiddel;
     this.utskrivendeLege = utskrivendeLege;
     this.p = p;
     this.reit = reit;
+
+    //Legger denne resepten til i pasientens reseptstabel
+    this.p.leggTilResept(this);
   }
 
 

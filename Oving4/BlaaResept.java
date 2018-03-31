@@ -3,8 +3,8 @@ class BlaaResept extends Resept{
   private double prosentRabatt = 75; //%
 
   //Constructor
-  public BlaaResept(Legemiddel legemiddel, Lege utskrivendeLege, int pasientId, int reit){
-    super(legemiddel, utskrivendeLege, pasientId, reit);
+  public BlaaResept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient p, int reit){
+    super(legemiddel, utskrivendeLege, p, reit);
   }
 
   //Public metoder
