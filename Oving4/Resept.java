@@ -1,11 +1,11 @@
 //Abstrakt klasse som ikke kan instansieres,
 // men kan vaere superklasse til blaa og hvite resepter.
-abstract class Resept{
+abstract class Resept implements Utskrivbar{
 
   // protected variabler.
   //(Static int deles av alle resepter og brukes til aa bestemme ID til nye resepter).
   protected static int antall = 0;
-  protected int ID;
+  protected int id;
   protected Legemiddel legemiddel;
   protected Lege utskrivendeLege;
   protected Pasient p;
@@ -14,15 +14,16 @@ abstract class Resept{
   //Constructor
   public Resept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient p, int reit){
     //Instansierer locale variabler og objekter
-    ID = antall;
+    id = antall;
     antall++;
     this.legemiddel = legemiddel;
     this.utskrivendeLege = utskrivendeLege;
     this.p = p;
     this.reit = reit;
 
-    //Legger denne resepten til i pasientens reseptstabel
+    //Legger denne resepten til i pasientens reseptstabel og legens reseptliste
     this.p.leggTilResept(this);
+    this.utskrivendeLege.leggTilResept(this);
   }
 
 
@@ -41,12 +42,18 @@ abstract class Resept{
     }
   }
 
+  //Interface-Metoder
+  public void skrivUt(){
+    System.out.printf("Legemiddelnummer: %d, Utskrivende lege: %s, PersonID: %d, Reit: %d.%n",
+    id, hentLege().hentNavn(), hentPasientId(), reit);
+  }
+
 
   //Getters
 
   // @return reseptens ID
   public int hentId(){
-    return ID;
+    return id;
   }
 
   // @return reseptens legemiddel

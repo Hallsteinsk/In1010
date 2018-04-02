@@ -17,4 +17,10 @@ class Fastlege extends Lege implements Kommuneavtale{
   public int hentAvtalenummer(){
     return avtaleNummer;
   }
+
+  //Metode som skriver ut all info om legen
+  @Override
+  public void skrivUt(){
+    System.out.printf("Navn: %s, AvtaleNummer: %d.%n", legeNavn, avtaleNummer);
+  }
 }

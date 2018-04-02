@@ -1,19 +1,24 @@
-class Legemiddel{
+class Legemiddel implements Utskrivbar{
 
   //protected variables
   protected String navn;
-  protected int ID;
+  protected int id;
   protected double pris;
   protected double virkestoff;
   private static int antall = 0;
 
   //Constructor
   public Legemiddel(String navn, double pris, double virkestoff){
-    this.ID = antall;
+    this.id = antall;
     antall++;
     this.navn = navn;
     this.pris = pris;
     this.virkestoff = virkestoff;
+  }
+
+  //Interface-metoder
+  public void skrivUt(){
+    System.out.printf("Navn: %s, ID: %d, Pris: %f, Virkestoff: %fmg.%n", navn, id, pris, virkestoff);
   }
 
   //Getters
@@ -22,7 +27,7 @@ class Legemiddel{
   }
 
   public int hentId(){
-    return ID;
+    return id;
   }
 
   public double hentPris(){

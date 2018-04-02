@@ -1,10 +1,10 @@
 import java.util.Iterator;
 
-class Lege implements Comparable<Lege>{
+class Lege implements Comparable<Lege>, Utskrivbar{
 
   //private variabler
-  private String legeNavn;
-  private Lenkeliste<Resept> reseptliste;
+  protected String legeNavn;
+  protected Lenkeliste<Resept> reseptliste;
 
   //Constructor
   public Lege(String legeNavn){
@@ -29,7 +29,7 @@ class Lege implements Comparable<Lege>{
     System.out.println(" ");
   }
 
-  //Metoder fra interface comparable<Lege>
+  //Metoder fra interface
 
   //Metode som samenlikner navnet til lege-objektet med et annet. Den returnerer en signed int
   //som er negativ, null, eller positiv avhengig av om navnet er mindre, lik
@@ -38,6 +38,11 @@ class Lege implements Comparable<Lege>{
   // @return int, som er -1, 0, eller 1, avhengig om objektet er mindre, likt eller stoerre
   public int compareTo(Lege annenLege){
     return this.hentNavn().compareTo(annenLege.hentNavn());
+  }
+
+  //Metode som skriver ut all info om legen
+  public void skrivUt(){
+    System.out.printf("Navn: %s.%n", legeNavn);
   }
 
   //Getters

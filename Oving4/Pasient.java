@@ -1,4 +1,4 @@
-class Pasient{
+class Pasient implements Utskrivbar{
   //Private variables
   private String navn;
   private String fodselsnummer;
@@ -14,6 +14,11 @@ class Pasient{
     this.fodselsnummer = fodselsnummer;
     this.id = antall;
     antall++;
+  }
+
+  //Interface-metoder
+  public void skrivUt(){
+    System.out.printf("Navn: %s, Foedselsnummer: %s, ID: %d.%n", navn, fodselsnummer, id);
   }
 
   //Getters

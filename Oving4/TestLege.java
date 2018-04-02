@@ -7,7 +7,23 @@ class TestLege{
     testSortering();
     testReseptlisten();
 
+  }
 
+  public static void testSortering(){
+    System.out.println("Tester sortering av legeer i en SortertLenkeliste");
+    Liste<Lege> legeliste = new SortertLenkeliste<Lege>();
+    legeliste.leggTil(new Lege("A"));
+    legeliste.leggTil(new Lege("ABC"));
+    legeliste.leggTil(new Lege("AB"));
+    legeliste.leggTil(new Lege("ABCDEFG"));
+    legeliste.leggTil(new Lege("ABCDE"));
+    legeliste.leggTil(new Lege("A"));
+
+    for(Lege lege : legeliste){
+      System.out.println(lege.hentNavn());
+    }
+
+    System.out.println(" ");
   }
 
   public static void testReseptlisten(){
@@ -28,23 +44,5 @@ class TestLege{
 
     System.out.println("Skriver ut liste med 3 resepter");
     paus.skrivUtResepter();
-  }
-
-  public static void testSortering(){
-    System.out.println("Tester sortering av legeer i en SortertLenkeliste");
-    Liste<Lege> legeliste = new SortertLenkeliste<Lege>();
-    legeliste.leggTil(new Lege("A"));
-    legeliste.leggTil(new Lege("ABC"));
-    legeliste.leggTil(new Lege("AB"));
-    legeliste.leggTil(new Lege("ABCDEFG"));
-    legeliste.leggTil(new Lege("ABCDE"));
-    legeliste.leggTil(new Lege("A"));
-
-    Iterator<Lege>  legeIterator = legeliste.iterator();
-    while(legeIterator.hasNext()){
-      System.out.println(legeIterator.next().hentNavn());
-    }
-
-    System.out.println(" ");
   }
 }
