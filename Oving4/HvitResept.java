@@ -1,9 +1,10 @@
 class HvitResept extends Resept{
 
   //Constructor
-  public HvitResept(Legemiddel legemiddel, Lege utskrivendeLege, int pasientId, int reit){
-    super(legemiddel, utskrivendeLege, pasientId, reit);
+  public HvitResept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient p, int reit){
+    super(legemiddel, utskrivendeLege, p, reit);
   }
+
 
   //Public metoder
 

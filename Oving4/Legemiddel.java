@@ -18,7 +18,7 @@ class Legemiddel implements Utskrivbar{
 
   //Interface-metoder
   public void skrivUt(){
-    System.out.printf("Navn: %s, ID: %d, Pris: %f, Virkestoff: %fmg.%n", navn, id, pris, virkestoff);
+    System.out.printf("Navn: %s, ID: %d, Pris: %.2f, Virkestoff: %.2fmg.%n", navn, id, pris, virkestoff);
   }
 
   //Getters

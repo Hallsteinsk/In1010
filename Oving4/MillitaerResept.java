@@ -4,9 +4,9 @@ class MillitaerResept extends HvitResept{
   private double prosentRabatt = 100; //%
 
   //Constructor
-  public MillitaerResept(Legemiddel legemiddel, Lege utskrivendeLege, int pasientId, int reit){
+  public MillitaerResept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient p, int reit){
     //Kaller Constructor til superklasse
-    super(legemiddel, utskrivendeLege, pasientId, reit);
+    super(legemiddel, utskrivendeLege, p, reit);
   }
 
   //Public metoder

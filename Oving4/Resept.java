@@ -44,8 +44,8 @@ abstract class Resept implements Utskrivbar{
 
   //Interface-Metoder
   public void skrivUt(){
-    System.out.printf("Legemiddelnummer: %d, Utskrivende lege: %s, PersonID: %d, Reit: %d.%n",
-    id, hentLege().hentNavn(), hentPasientId(), reit);
+    System.out.printf("Legemiddelnavn: %s, Utskrivende lege: %s, PersonID: %d, Reit: %d.%n",
+    hentLegemiddel().hentNavn(), hentLege().hentNavn(), hentPasientId(), reit);
   }
 
 

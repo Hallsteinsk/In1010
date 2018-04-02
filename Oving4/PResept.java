@@ -2,14 +2,13 @@ class PResept extends HvitResept{
 
   //protected variabler
   private double kronerRabbat = 116;
-  //Hadde haapet at denne kunne bli lest inn i super-Constructoren. No such luck.
-  //private int antallReit = 3;
+
 
 
   //Constructor: Tar inn Reit her, men den overskrives av antallReit i superklassens Constructor
-  public PResept(Legemiddel legemiddel, Lege utskrivendeLege, int pasientId, int reit){
+  public PResept(Legemiddel legemiddel, Lege utskrivendeLege, Pasient p, int reit){
     //Kaller Constructor til superklasse. Benynner et "Magic number" for a bestemme at reit er lik 3.
-    super(legemiddel, utskrivendeLege, pasientId, 3);
+    super(legemiddel, utskrivendeLege, p, 3);
   }
 
   //Public metoder

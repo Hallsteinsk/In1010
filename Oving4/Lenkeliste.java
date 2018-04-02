@@ -8,8 +8,6 @@ sterkt innspirert av IN1010 slides uke 6.
 
 Denne klassen er endret siden Oblig3. Jeg fikk noen tips av Morten som rettet min
 Oblig. Jeg har endret public T Fjern() og public void leggTil().
-Det var ogsaa et veldig fint tips ute paa piazza om at man kan benytte en
-egen metode for aa ta ut et element i den lenkede listen.
 
 Jeg velger aa fortsette med aa ha Node som en ekstern klasse. LenkelisteIterator
 blir ogsaa en ekstern klasse, og derfor var jeg noedt til aa ha typeparameter
@@ -60,9 +58,7 @@ class Lenkeliste<T> implements Liste<T>{
     }
     //Lager ny node med data x av tyopen T.
     Node<T> nyNode = new Node<T>(x);
-
-    //TODO implementer metode som ble presentert i plazza:
-    //Fikser referansne til noden foer og etter den nye noden
+    //Fikser referanser
     nyNode.settNeste(node.neste());
     node.settNeste(nyNode);
     //Oeker antallet noder med 1.

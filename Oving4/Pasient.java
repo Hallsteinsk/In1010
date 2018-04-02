@@ -23,8 +23,20 @@ class Pasient implements Utskrivbar{
 
   //Getters
 
+  public String hentNavn(){
+    return navn;
+  }
+
   public int hentId(){
     return id;
+  }
+
+  public String hentFodselsnummer(){
+    return fodselsnummer;
+  }
+
+  public Stabel<Resept> hentReseptStabel(){
+    return reseptStabel;
   }
 
   //Setters
