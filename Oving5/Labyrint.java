@@ -1,12 +1,12 @@
 /*
 
-Behandler rad som x-koordinat, og kolonne som y-koordinat;
+Behandler kolonne som x-koordinat, og rad som y-koordinat med positiv retning nedover.
 
 */
 
 //Imports
-import java.io.File;
 import java.util.Scanner;
+import java.io.File;
 import java.io.FileNotFoundException;
 
 //Implementasjon av klasse
@@ -32,13 +32,20 @@ class Labyrint{
   //Metode som returnere et "bilde" av labyrinten i String format
   // @return String, er en tekststreng som inneholder labyrinten.
   public String toString(){
+    //Lager en tom streng til aa holde bildet.
     String labyrint = new String();
-    for(int kol=0; kol<kolonner; kol++){
-      for(int rad=0; rad<rader; rad++){
-        labyrint += ruteArray[rad][kol].tilTegn();
+
+    //Benytter enhanced for loop til aa iterere gjennom ruteArray og lagre
+    //alle ruters tegn inn i labyrint-strengen.
+    for(Rute[] rad: ruteArray){
+      for(Rute kol : rad){
+        labyrint += kol.tilTegn();
       }
+      //legger inn linjeksift etter hver rad
       labyrint += '\n';
     }
+
+    //returnerer det ferdige bildet i stirng format
     return labyrint;
   }
 
@@ -52,8 +59,8 @@ class Labyrint{
       Scanner sc = new Scanner(fil);
 
       //Henter den foerste linjene i labyrintfilen, og finner dimensjonene til labyrinten.
-      int kolonner = Integer.parseInt(sc.next());
       int rader = Integer.parseInt(sc.next());
+      int kolonner = Integer.parseInt(sc.next());
       sc.nextLine();
 
       //Opretter en referanse til et tomt array med dimensjonene til labyrinten
@@ -62,19 +69,19 @@ class Labyrint{
       String buffer;
 
       //Gaar gjennnom hver linje i labyrintfilen og laster strengen inn i buffer
-      for(int kol=0; kol<kolonner; kol++){
+      for(int rad=0; rad<rader; rad++){
         buffer = sc.nextLine();
         //Blar gjennom buffer-strengen og henter ut hver char.
-        for(int rad=0; rad<rader; rad++){
+        for(int kol=0; kol<kolonner; kol++){
           //Oppretter ruteobjekter av riktig type og putter dem inn i ruteArray
-          if(buffer.charAt(rad) == '.'){
+          if(buffer.charAt(kol) == '.'){
             ruteArray[rad][kol] = new HvitRute();
               /*if(erAapning(rader, kolonner, rad, kol)){
                 ruteArray[rad][kol] = new Aapning();
               }else{
                 ruteArray[rad][kol] = new HvitRute();
               }*/
-          }else if(buffer.charAt(rad) == '#'){
+          }else if(buffer.charAt(kol) == '#'){
             ruteArray[rad][kol] = new SortRute();
           }else{
             System.out.println("Feil under lesing av labyrint!");
