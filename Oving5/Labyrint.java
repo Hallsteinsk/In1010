@@ -8,6 +8,7 @@ Behandler kolonne som x-koordinat, og rad som y-koordinat med positiv retning ne
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
 
 //Implementasjon av klasse
 class Labyrint{
@@ -16,6 +17,7 @@ class Labyrint{
   private int rader;
   private int kolonner;
   private Rute[][] ruteArray;
+  private Liste<String> utveiliste;
 
   //Privat Constructor
   private Labyrint(Rute[][] ruteArray, int rader, int kolonner){
@@ -23,7 +25,14 @@ class Labyrint{
     this.kolonner = kolonner;
     this.ruteArray = ruteArray;
 
+    utveiliste = new SortertLenkeliste<String>();
+
     //La alle ruter faa vite om sin nabo
+    for(int rad=0; rad<rader; rad++){
+      for(int kol=0; kol<kolonner; kol++){
+        leggTilNaboer(rad, kol);
+      }
+    }
 
   }
 
@@ -75,14 +84,13 @@ class Labyrint{
         for(int kol=0; kol<kolonner; kol++){
           //Oppretter ruteobjekter av riktig type og putter dem inn i ruteArray
           if(buffer.charAt(kol) == '.'){
-            ruteArray[rad][kol] = new HvitRute();
-              /*if(erAapning(rader, kolonner, rad, kol)){
-                ruteArray[rad][kol] = new Aapning();
-              }else{
-                ruteArray[rad][kol] = new HvitRute();
-              }*/
+            if(erAapning(rader, kolonner, rad, kol)){
+              ruteArray[rad][kol] = new Aapning(rad, kol);
+            }else{
+              ruteArray[rad][kol] = new HvitRute(rad, kol);
+            }
           }else if(buffer.charAt(kol) == '#'){
-            ruteArray[rad][kol] = new SortRute();
+            ruteArray[rad][kol] = new SortRute(rad, kol);
           }else{
             System.out.println("Feil under lesing av labyrint!");
           }
@@ -96,6 +104,81 @@ class Labyrint{
     //Kaster FileNotFoundException videre hvis dette oppstaar.
     }catch(FileNotFoundException e){
       throw e;
+    }
+  }
+
+  //Metode som finner veien ut fra labyrinten fra en spesifikk startrute
+  public Liste<String> finnUtveiFra(int kolonne, int rad){
+    //Soerger for at man begynner aa lese inn utveier i en helt tom liste.
+    utveiliste.toem();
+
+    //Kaller metoden for aa finne utvei i ruteklassen med denne labyrinten som referanse
+    ruteArray[rad][kolonne].finnUtvei(this);
+
+    /* Implementasjon under testing:
+
+    //Etter at det er funnet utveier maa de returneres i string format.
+    String utveier = String.format("Utveier fra (%d, %d):%n", rad, kolonne);
+    if(utveiliste.stoerrelse() == 0){
+      utveier += "Ingen utveier =(";
+    }else{
+      int teller = 1;
+      //itererer gjennom alle utveier i utveiliste og legger dem til utveistrengen
+      //som skal returneres
+      for(String utvei : utveiliste){
+        utveier += teller + ": " + utvei + "\n";
+        teller++;
+      }
+      //Rydder opp utveilisten slik at den kan brukes igjen
+      utveiliste.toem();
+    }
+    return utveier;*/
+
+    return utveiliste;
+  }
+
+  //Metode som en aapning benytter for aa legge til utveistrengen til utveilisten
+  // @param String utvei er utveien som skal legges til
+  public void leggTilUtvei(String utvei){
+    utveiliste.leggTil(utvei);
+  }
+
+
+  //Private hjelpemetoder
+
+  //Metode som sjekker om en hvit rute med gitte koordinater er en aapning eller ikke
+  //Denne er statisk da den blir kalt av Static Factory metoden.
+  // @param int rader er maks antall rader i labyrinten
+  // @param int kolonner er maks antall kolionner i labyrinten
+  // @param int rad er den aktuelle raden den hvite ruten ligger paa
+  // @param int kol er den aktuelle kolonnen den hvite ruten ligger paa
+  // @return boolean, true hvis ruten er en aapneing, falske hvis ikke
+  private static boolean erAapning(int rader, int kolonner, int rad, int kol){
+    if(rad == 0 || rad == rader -1){
+      return true;
+    }else if(kol == 0 || kol == kolonner -1){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  //Metode som legger til referanse til sine naboer i alle retninger den akutelle ruten har naboer.
+  //Metoden sjekker om ruten i et hjoerne eller paa en kant, og legger til naboer deretter.
+  //@param int rad er raden til den ruten som skal faa referanser til sine naboer
+  //@param int kol er kolonnen til den ruten som skal faa referanser til sine naboer
+  private void leggTilNaboer(int rad, int kol){
+    if(rad>0){
+      ruteArray[rad][kol].leggTilNabo(ruteArray[rad-1][kol]);
+    }
+    if(rad<rader-1){
+      ruteArray[rad][kol].leggTilNabo(ruteArray[rad+1][kol]);
+    }
+    if(kol>0){
+      ruteArray[rad][kol].leggTilNabo(ruteArray[rad][kol-1]);
+    }
+    if(kol<kolonner-1){
+      ruteArray[rad][kol].leggTilNabo(ruteArray[rad][kol+1]);
     }
   }
 }

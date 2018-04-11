@@ -35,7 +35,7 @@ class Lenkeliste<T> implements Liste<T>{
   }
 
 
-  //Interface
+  //Interface Liste<T>
 
   //Metode som returnere stoerrelsen til listen (antall noder)
   // @return int antallet noder i listen
@@ -144,5 +144,13 @@ class Lenkeliste<T> implements Liste<T>{
     //Benytter tips jeg fikk fra retting av Oblig3.
     //Benytter eksisterende metoder
     return fjern(0);
+  }
+
+  //Metode for aa "toemme" lenkelisten. Man sletter alle noder i listen, slik at den
+  //kan brukes om igjen til et nytt formaal. Dette benyttes i metoden "finnUtvei"
+  //i klassen Rute. (Er i praksis aa kalle alt i constructor en gang til)
+  public void toem(){
+    start = new Node<T>(null);
+    antallNoder = 0;
   }
 }
