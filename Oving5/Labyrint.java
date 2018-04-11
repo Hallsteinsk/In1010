@@ -25,7 +25,7 @@ class Labyrint{
     this.kolonner = kolonner;
     this.ruteArray = ruteArray;
 
-    utveiliste = new SortertLenkeliste<String>();
+    utveiliste = new Lenkeliste<String>();
 
     //La alle ruter faa vite om sin nabo
     for(int rad=0; rad<rader; rad++){
@@ -115,24 +115,8 @@ class Labyrint{
     //Kaller metoden for aa finne utvei i ruteklassen med denne labyrinten som referanse
     ruteArray[rad][kolonne].finnUtvei(this);
 
-    /* Implementasjon under testing:
-
-    //Etter at det er funnet utveier maa de returneres i string format.
-    String utveier = String.format("Utveier fra (%d, %d):%n", rad, kolonne);
-    if(utveiliste.stoerrelse() == 0){
-      utveier += "Ingen utveier =(";
-    }else{
-      int teller = 1;
-      //itererer gjennom alle utveier i utveiliste og legger dem til utveistrengen
-      //som skal returneres
-      for(String utvei : utveiliste){
-        utveier += teller + ": " + utvei + "\n";
-        teller++;
-      }
-      //Rydder opp utveilisten slik at den kan brukes igjen
-      utveiliste.toem();
-    }
-    return utveier;*/
+    //Sorterer listen etter lengden på utveiene inn
+    sorterUtveiliste();
 
     return utveiliste;
   }
@@ -180,5 +164,27 @@ class Labyrint{
     if(kol<kolonner-1){
       ruteArray[rad][kol].leggTilNabo(ruteArray[rad][kol+1]);
     }
+  }
+
+  //Metode som sorterer utveilisten. her sorteres utveine etter lengden på Stringen.
+  //Benytter en enkel bublesort, da listene er forholdsvis "smaa".
+  private void sorterUtveiliste(){
+    for(int i=0; i<utveiliste.stoerrelse()-1; i++){
+      for(int j=0; j<utveiliste.stoerrelse()-1-i; j++){
+        if(utveiliste.hent(j).length() > utveiliste.hent(j+1).length()){
+          byttUtveilisteIndex(j, j+1);
+        }
+      }
+    }
+  }
+
+  //Metode som bytter verdien til to noder i utveilsten. Dette er en enkel swap
+  //som blir benyttet i sorteringsalgoritmen "sorterUtveiliste()"
+  // @param int a er indeksen til det foerste elementet som skal swappes
+  // @param int b er indeksen til det andre elementet som skal swappes
+  private void byttUtveilisteIndex(int a, int b){
+    String tmp = utveiliste.hent(a);
+    utveiliste.sett(a, utveiliste.hent(b));
+    utveiliste.sett(b, tmp);
   }
 }

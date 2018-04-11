@@ -33,9 +33,10 @@ class SortertLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
           node = node.neste();
         }
       }
-      //Det nye elementet er stoerre en alle i lista. Den nye noden settes bakerst
-      node.settNeste(nyNode);
     }
+    //Det nye elementet er stoerre en alle i lista. Den nye noden settes bakerst
+    node.settNeste(nyNode);
+
     //Oeker antallet noder.
     antallNoder++;
   }

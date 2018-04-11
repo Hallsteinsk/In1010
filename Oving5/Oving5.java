@@ -35,8 +35,13 @@ class Oblig5 {
 
                 Liste<String> utveier = l.finnUtveiFra(startKol, startRad);
                 if (utveier.stoerrelse() != 0) {
-                    for (String s : utveier) {
-                        System.out.println(s);
+                    System.out.printf("Det er %d veier ut fra (%d, %d)%n", utveier.stoerrelse(), startKol, startRad);
+                    System.out.println("Vil du se disse veiene? ('j' for aa se utveiene)");
+                    String[] skrivUt = inn.nextLine().split(" ");
+                    if(skrivUt[0].equals("j")){
+                      for (String s : utveier) {
+                          System.out.println(s);
+                      }
                     }
                 } else {
                     System.out.println("Ingen utveier.");

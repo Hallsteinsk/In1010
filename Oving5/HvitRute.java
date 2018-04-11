@@ -19,10 +19,12 @@ class HvitRute extends Rute{
   }
 
   public void gaa(Rute forrige, String utvei, Labyrint labyrint){
-    utvei += String.format("(%d, %d)-->", kolonne, rad);
-    for(Rute naborute: naboer){
-      if(naborute != forrige){
-        naborute.gaa(this, utvei, labyrint);
+    if(!utvei.contains(String.format("(%d, %d)", kolonne, rad))){
+      utvei += String.format("(%d, %d)-->", kolonne, rad);
+      for(Rute naborute: naboer){
+        if(naborute != forrige){
+          naborute.gaa(this, utvei, labyrint);
+        }
       }
     }
   }

@@ -1,6 +1,3 @@
-//Imports
-import java.util.Hashtable;
-
 abstract class Rute{
   //protected medlemmer
   protected int kolonne;
