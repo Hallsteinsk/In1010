@@ -34,21 +34,41 @@ class Oblig5 {
                 int startRad = Integer.parseInt(ord[1]);
 
                 Liste<String> utveier = l.finnUtveiFra(startKol, startRad);
+
+                /*Her la jeg inn en del linjer. Foerst sjekker jeg om labyrintens
+                metode finnUtveiFra returnerer en tom string. Skjer dette betyr
+                det at ingen utveier ble naadd. Er det ingen utveir faar bruker
+                en beskjed om dette. Dereter sjekker jeg om utveier inneholoder
+                koordinater, eller en beskjed om at den startet i en sort rute.
+                Starter man i en sort rute faar man beskjed om dette, og maa proeve
+                nye koordinater. Er det utveier i listen blir man presantert med
+                den raskeste, og hvor mange utveier det er fra startruten. Man
+                kan velge aa se alle utveine med aa trykke paa 'j'.*/
+
                 if (utveier.stoerrelse() != 0) {
-                    System.out.printf("Det er %d veier ut fra (%d, %d)%n", utveier.stoerrelse(), startKol, startRad);
-                    System.out.println("Vil du se disse veiene? ('j' for aa se utveiene)");
-                    String[] skrivUt = inn.nextLine().split(" ");
-                    if(skrivUt[0].equals("j")){
-                      for (String s : utveier) {
-                          System.out.println(s);
+                    if(utveier.hent(0).charAt(0) == '('){
+                      System.out.printf("Det er %d veier ut fra (%d, %d). Her er den raskeste:%n",
+                        utveier.stoerrelse(), startKol, startRad);
+                      System.out.println(utveier.hent(0));
+                      System.out.println("Vil du alle utveiene? ('j' for aa se utveiene)");
+                      String[] skrivUt = inn.nextLine().split(" ");
+                      if(skrivUt[0].equals("j")){
+                        int teller = 1;
+                        for (String s : utveier) {
+                            System.out.printf("%d: %s%n",teller, s);
+                            teller++;
+                        }
                       }
+                    }else{
+                      System.out.println(utveier.hent(0));
                     }
+
                 } else {
                     System.out.println("Ingen utveier.");
                 }
                 System.out.println();
             //La inn denne siden jeg var slurvete med aa skrive inn koordinater,
-            // og programmet sluttet ofte med dette unntaket. Hallstein 11.04.2018
+            // og programmet sluttet ofte med dette unntaket.
             }catch (ArrayIndexOutOfBoundsException e){
                 System.out.println("Skriv inn TO koordinater!");
             } catch (NumberFormatException e) {
