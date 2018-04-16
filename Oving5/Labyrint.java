@@ -1,7 +1,12 @@
 /*
-
+Klasse som inneholder en labyrint. Det vil si et to-dimensjonjalt array med
+ruter. I i tillegg har labyrinten en del metoder som gjoer at man kan finne veien
+ut av labyrinten og skrive ut et "bilde" av hvordan labyrinten ser ut. Denne klassen
+har ogsaa en privat constructor og benytter en static factory metode for aa
+konstruere en instans hvor alt er instansiert korrekt.
 Behandler kolonne som x-koordinat, og rad som y-koordinat med positiv retning nedover.
-
+Jeg har ogsaa proevd aa gjemme hjelpemetoder med aa gjoere dem private. Tanken
+er at disse ikke skal bli tilgjengelig for andre enn denne klassen.
 */
 
 //Imports
@@ -33,30 +38,9 @@ class Labyrint{
         leggTilNaboer(rad, kol);
       }
     }
-
   }
 
   //Public metoder
-
-  //Metode som returnere et "bilde" av labyrinten i String format
-  // @return String, er en tekststreng som inneholder labyrinten.
-  public String toString(){
-    //Lager en tom streng til aa holde bildet.
-    String labyrint = new String();
-
-    //Benytter enhanced for loop til aa iterere gjennom ruteArray og lagre
-    //alle ruters tegn inn i labyrint-strengen.
-    for(Rute[] rad: ruteArray){
-      for(Rute kol : rad){
-        labyrint += kol.tilTegn();
-      }
-      //legger inn linjeksift etter hver rad
-      labyrint += '\n';
-    }
-
-    //returnerer det ferdige bildet i stirng format
-    return labyrint;
-  }
 
   //Statisk metode som leser en fil og "bygger" labyrinten basert paa innholdet i filen.
   //I foelge oppgavetekst heter dette static factory method. Denne metoden benytter
@@ -107,7 +91,34 @@ class Labyrint{
     }
   }
 
+  //Metode som returnere et "bilde" av labyrinten i String format
+  // @return String, er en tekststreng som inneholder labyrinten.
+  public String toString(){
+    //Lager en tom streng til aa holde bildet.
+    String labyrint = new String();
+
+    //Benytter enhanced for loop til aa iterere gjennom ruteArray og lagre
+    //alle ruters tegn inn i labyrint-strengen.
+    for(Rute[] rad: ruteArray){
+      for(Rute kol : rad){
+        labyrint += kol.tilTegn();
+      }
+      //legger inn linjeksift etter hver rad
+      labyrint += '\n';
+    }
+
+    //returnerer det ferdige bildet i stirng format
+    return labyrint;
+  }
+
   //Metode som finner veien ut fra labyrinten fra en spesifikk startrute
+  //Her har jeg bestetm at man kun faar lov til aa starte i en hvit rute. Dersom
+  //man proever aa starte i en sort rute vil returlisten kun inneholde en String
+  //som varsler om at man maa proeve igjen.
+  // @param int kolonne er startrutens kolonne (eller x-koordinat)
+  // @param int rad er startrutens rad (eller y-koordinat)
+  // @return Liste<String> er en liste som inneholder alle utveine fra startruten
+  //eller en beskjed om at man ikke kan starte fra en sort rute.
   public Liste<String> finnUtveiFra(int kolonne, int rad){
     //Soerger for at man begynner aa lese inn utveier i en helt tom liste.
     utveiliste.toem();

@@ -1,4 +1,10 @@
+ /* Denne abstakte klassen er superklassen til alle ruter. Den inneholder noen
+ metoder som er felles for alle ruter, samt noen abstrakte klasser som underklassene
+ maa implementere selv.
+ */
+
 abstract class Rute{
+
   //protected medlemmer
   protected int kolonne;
   protected int rad;
@@ -46,6 +52,7 @@ abstract class Rute{
     }
   }
 
+
   //Abstract metoder som kun prototypes her. Implementasjon kommer i underklasser
 
   //Metode for aa returnere rutens type som tegn
@@ -63,7 +70,7 @@ abstract class Rute{
   //Her er det tenkt a sende en referanse til seg selv, slik man ikke gaar bakover.
   // @param String utvei er den forelopige veien ut. utvei inneholder alle tidligere besoekte ruter
   // @Labyrint labyrint er referanse til labyrinten som startet kallet for a finne en utvei.
-  //En aapning lenger til hele utveistrenegen i labyrinten sin utveiliste.
+  //En aapning legger til hele utveistrenegen i labyrinten sin utveiliste.
   abstract public void gaa(Rute rute, String utvei, Labyrint labyrint);
 
 }
