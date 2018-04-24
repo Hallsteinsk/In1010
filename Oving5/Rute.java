@@ -36,7 +36,8 @@ abstract class Rute{
   //Deretter gaar kallet rekursivt videre gjennom alle hvite ruter helt til det finner
   //en utvei eller en blindvei som ender i kun sorte ruter. Dersom man proever aa finne
   //veien ut fra en sort rute vil man faa beskjed om at det ikke gaar. Man maa
-  //starte i en hvit rute.
+  //starte i en hvit rute. Dersom dette oedelegger for tester kan man kommenter ut
+  //linje 44 til 54, og kommenter inn 57 til 61.
   // @param Labyrint labyrint er labyrintent som skal mottaa en liste med alle utveier.
   //Det er tenkt at den labyrinten som inneholder ruten starter kallet og faar
   //utveien i sin utveiliste.
@@ -52,6 +53,13 @@ abstract class Rute{
     }
   }
 
+  /*
+  public void finnUtvei(Labyrint labyrint){
+    for(Rute naborute: naboer){
+      naborute.gaa(this, String.format("(%d, %d)-->", kolonne, rad), labyrint);
+    }
+  }
+*/
 
   //Abstract metoder som kun prototypes her. Implementasjon kommer i underklasser
 
