@@ -18,10 +18,12 @@ class MonitorKryptert{
   private ReentrantLock laas;
   private Condition ikkeTom;
   private String mode;
+  private volatile int aktiveTelegrafister;
 
   //Constructor
-  public MonitorKryptert(String mode){
+  public MonitorKryptert(String mode, int antallTelegrafister){
     this.mode = mode;
+    aktiveTelegrafister = antallTelegrafister;
     meldinger = new ArrayList<Melding>();
     laas = new ReentrantLock();
     ikkeTom = laas.newCondition();
@@ -34,6 +36,7 @@ class MonitorKryptert{
   public void leggTil(Melding melding) throws InterruptedException{
     laas.lock();
     try{
+      if(melding.equals("INGEN FLERE MELDINGER")){aktiveTelegrafister--;}
       meldinger.add(melding);
       ikkeTom.signalAll();
     }finally{
@@ -48,11 +51,23 @@ class MonitorKryptert{
    public Melding taUt() throws InterruptedException{
      laas.lock();
      try{
-       while(tom()){ikkeTom.await();}
-       if(mode.equals("debug")){System.out.printf("Elementer i meldinger: %d%n", meldinger.size());}
-       return meldinger.remove(0);
+         while(tom()){ikkeTom.await();}
+
+         return meldinger.remove(0);
      }finally{
+       if(mode.equals("debug")){System.out.printf("Elementer i meldinger: %d%n", meldinger.size());}
        laas.unlock();
+     }
+   }
+
+   public boolean tomOgIngenAktiveTelegrafister(){
+     laas.lock();
+     try{
+       if(tom() && aktiveTelegrafister == 0){
+         return true;
+       }else{
+         return false;
+       }
      }
    }
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 class Hovedprogram{
 
   final static int ANTALL_TELEGRAFISTER = 3;
-  final static int ANTALL_KRYPTOGRAFER= 1;
+  final static int ANTALL_KRYPTOGRAFER= 4;
   static String mode;
 
   public static void main(String[] args){
@@ -15,9 +15,11 @@ class Hovedprogram{
         System.out.println("Kjoerer i debug-mode.");
       }else{
         System.out.println("Kjoerer ikke i debug-mode.");
+        mode = "a";
       }
     }catch(ArrayIndexOutOfBoundsException e){
       System.out.println("Kjoerer ikke i debug-mode.");
+      mode = "b";
     }
 
     //Lager Operasjonssentral og henter ut kanaler, akkurat som oppgaveteksten beskriver
@@ -34,7 +36,10 @@ class Hovedprogram{
     }
 
     //Lager Kryptografer
-    Kryptograf kryptograf = new Kryptograf(monitorK, mode);
+    ArrayList<Kryptograf> kryptografer = new ArrayList<>();
+    for(int i=0; i<ANTALL_KRYPTOGRAFER; i++){
+      kryptografer.add(new Kryptograf(monitorK, mode, i+1));
+    }
 
     //Starter telegrfister
     for(Telegrafist telegrafist : telegrafister){
@@ -42,6 +47,8 @@ class Hovedprogram{
     }
 
     //Starter Kryptografer
-    new Thread(kryptograf).start();
+    for(Kryptograf kryptograf : kryptografer){
+      new Thread(kryptograf).start();
+    }
   }
 }

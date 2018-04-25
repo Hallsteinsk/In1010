@@ -18,6 +18,7 @@ class Telegrafist implements Runnable{
 
   /** Thread-metode
   */
+  @Override
   public void run(){
     try{
       String melding = kanal.lytt();
