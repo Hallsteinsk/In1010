@@ -23,8 +23,8 @@ class Telegrafist implements Runnable{
     try{
       String melding = kanal.lytt();
       while(melding != null){
-        if(mode.equals("debug")){System.out.printf("KanalID: %d, sekvensnummer: %d%n",
-        kanalId, sekvensnummer);}
+        //if(mode.equals("debug")){System.out.printf("KanalID: %d, sekvensnummer: %d%n",
+        //kanalId, sekvensnummer);}
         monitor.leggTil(new Melding(melding, kanalId, sekvensnummer));
         sekvensnummer++;
         melding = kanal.lytt();

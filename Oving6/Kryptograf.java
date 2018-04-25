@@ -15,16 +15,16 @@ class Kryptograf implements Runnable{
     try{
       Melding kryptert;
       String dekryptertTekst;
-      while(!kMonitor.tomOgIngenAktiveTelegrafister()){
+      while(true){
         kryptert = kMonitor.taUt();
-        dekryptertTekst = Kryptografi.dekrypter(kryptert.hentInnhold());
-        if(mode.equals("debug")){System.out.printf("Dekryptert melding: %s%n", dekryptertTekst);}
-        kryptert = kMonitor.taUt();
-        if(kryptert.hentInnhold().equals("INGEN FLERE MELDINGER")){
-          aktiveTelegrafister--;
-          if(mode.equals("debug")){System.out.printf("INGEN FLERE MELDINGER. Aktvie telegrfister: %d%n"
-          , aktiveTelegrafister);}
+        if(kryptert.hentInnhold().equals("STOPP")){
+          if(mode.equals("debug")){System.out.println("Stopp");
+          break;
+          }
         }
+
+        dekryptertTekst = Kryptografi.dekrypter(kryptert.hentInnhold());
+        //if(mode.equals("debug")){System.out.printf("Dekryptert melding: %s%n", dekryptertTekst);}
       }
     }catch(InterruptedException e){
       System.out.println("Kryptograf Stoppet...");

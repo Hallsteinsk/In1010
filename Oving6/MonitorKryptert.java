@@ -36,7 +36,8 @@ class MonitorKryptert{
   public void leggTil(Melding melding) throws InterruptedException{
     laas.lock();
     try{
-      if(melding.equals("INGEN FLERE MELDINGER")){aktiveTelegrafister--;}
+      if(melding.hentInnhold().equals("INGEN FLERE MELDINGER")){System.out.println("HOY"); aktiveTelegrafister--;}
+      //if(mode.equals("debug")){System.out.printf("Aktive telegrafister: %d%n", aktiveTelegrafister);}
       meldinger.add(melding);
       ikkeTom.signalAll();
     }finally{
@@ -51,23 +52,15 @@ class MonitorKryptert{
    public Melding taUt() throws InterruptedException{
      laas.lock();
      try{
-         while(tom()){ikkeTom.await();}
-
-         return meldinger.remove(0);
+       if(tomOgIngenAktiveTelegrafister()){
+         return new Melding("STOPP", 0, 0);
+       }else{
+          while(tom()){ikkeTom.await();}
+          return meldinger.remove(0);
+       }
      }finally{
        if(mode.equals("debug")){System.out.printf("Elementer i meldinger: %d%n", meldinger.size());}
        laas.unlock();
-     }
-   }
-
-   public boolean tomOgIngenAktiveTelegrafister(){
-     laas.lock();
-     try{
-       if(tom() && aktiveTelegrafister == 0){
-         return true;
-       }else{
-         return false;
-       }
      }
    }
 
@@ -76,5 +69,14 @@ class MonitorKryptert{
 
    private boolean tom(){
      return meldinger.isEmpty();
+   }
+
+   private boolean tomOgIngenAktiveTelegrafister(){
+     if(mode.equals("debug")){System.out.printf("Aktive telegrafister: %d%n", aktiveTelegrafister);}
+     if(tom() && aktiveTelegrafister == 0){
+       return true;
+     }else{
+       return false;
+     }
    }
 }
