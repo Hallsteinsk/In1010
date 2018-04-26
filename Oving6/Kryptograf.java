@@ -1,12 +1,10 @@
 class Kryptograf implements Runnable{
 
-  private MonitorKryptert kMonitor;
-  //private MonitorDekryptert dMonitor;
+  private Monitor monitor;
   private String mode;
 
-  public Kryptograf(MonitorKryptert kMonitor, /*MonitorDekryptert dMonitor,*/ String mode){
-    this.kMonitor = kMonitor;
-    //this.dMonitor = dMonitor;
+  public Kryptograf(Monitor monitor, String mode){
+    this.monitor = monitor;
     this.mode = mode;
   }
 
@@ -21,13 +19,21 @@ class Kryptograf implements Runnable{
   public void run(){
     try{
       Melding kryptert;
+      String innhold;
       String dekryptertTekst;
       while(true){
-        kryptert = kMonitor.taUt();
-        if(kryptert.hentInnhold().equals("STOPP")){break;}
-        dekryptertTekst = Kryptografi.dekrypter(kryptert.hentInnhold());
-        //TODO: dMonitor.leggTil(new Melding(dekryptertTekst, kryptert.hentKanalId(), kryptert.hentSekvensNummer());
-        if(mode.equals("debug")){System.out.printf("Dekryptert melding: %s%n", dekryptertTekst);}
+        kryptert = monitor.taUtKryptert();
+        innhold = kryptert.hentInnhold();
+        if(innhold.equals("STOPP")){
+          break;
+        }else if(innhold.equals("INGEN FLERE MELDINGER")){
+          monitor.leggTilDekryptert(new Melding(innhold, kryptert.hentKanalId(), kryptert.hentSekvensNummer()));
+        }else{
+          dekryptertTekst = Kryptografi.dekrypter(kryptert.hentInnhold());
+          monitor.leggTilDekryptert(new Melding(dekryptertTekst, kryptert.hentKanalId(), kryptert.hentSekvensNummer()));
+          if(mode.equals("debug")){System.out.printf("Dekryptert melding: %s%n", dekryptertTekst);}
+        }
+
       }
     }catch(InterruptedException e){
       System.out.println("Kryptograf Stoppet...");

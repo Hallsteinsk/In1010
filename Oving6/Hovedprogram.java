@@ -27,18 +27,18 @@ class Hovedprogram{
     Kanal[] kanaler = ops.hentKanalArray();
 
     //Lager monitor for krypterte beskjeder
-    MonitorKryptert monitorK = new MonitorKryptert(mode, ANTALL_TELEGRAFISTER);
+    Monitor monitor = new Monitor(mode, ANTALL_TELEGRAFISTER, ANTALL_KRYPTOGRAFER);
 
     //Lager en ArrayList med telegrfister, hvor hver telegrfist faar sin kanal.
     ArrayList<Telegrafist> telegrafister = new ArrayList<>();
     for(Kanal kanal : kanaler){
-      telegrafister.add(new Telegrafist(kanal, monitorK, mode));
+      telegrafister.add(new Telegrafist(kanal, monitor, mode));
     }
 
     //Lager Kryptografer
     ArrayList<Kryptograf> kryptografer = new ArrayList<>();
     for(int i=0; i<ANTALL_KRYPTOGRAFER; i++){
-      kryptografer.add(new Kryptograf(monitorK, mode));
+      kryptografer.add(new Kryptograf(monitor, mode));
     }
 
     //Starter telegrfister

@@ -13,13 +13,13 @@ class Telegrafist implements Runnable{
 
   //Private variabler
   private Kanal kanal;
-  private MonitorKryptert monitor;
+  private Monitor monitor;
   private String mode;
   private int kanalId;
   private int sekvensnummer;
 
   //Constructor
-  public Telegrafist(Kanal kanal, MonitorKryptert monitor, String mode){
+  public Telegrafist(Kanal kanal, Monitor monitor, String mode){
     this.mode = mode;
     this.kanal = kanal;
     this.monitor = monitor;
@@ -39,11 +39,11 @@ class Telegrafist implements Runnable{
     try{
       String melding = kanal.lytt();
       while(melding != null){
-        monitor.leggTil(new Melding(melding, kanalId, sekvensnummer));
+        monitor.leggTilKryptert(new Melding(melding, kanalId, sekvensnummer));
         sekvensnummer++;
         melding = kanal.lytt();
       }
-      monitor.leggTil(new Melding("INGEN FLERE MELDINGER", kanalId, sekvensnummer));
+      monitor.leggTilKryptert(new Melding("INGEN FLERE MELDINGER", kanalId, sekvensnummer));
     }catch(InterruptedException e){
       System.out.printf("Telegrafist som lytter til kanal %d stoppet paa sekvensnummer %d.%n",
       kanalId, sekvensnummer);
