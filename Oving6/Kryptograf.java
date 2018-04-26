@@ -10,6 +10,13 @@ class Kryptograf implements Runnable{
     this.mode = mode;
   }
 
+  /** Thread-metode.
+  * Denne traaden gaar i en loekke som leser inn meldinger fra monitoren, og
+  * dekrypterer dem. Den dekrypterte meldingen puttes inn i en monitor for dekrypterte
+  * meldinger. Dersom det ikke er flere meldinger i monitor og alle
+  * telegrfistene har stoppet mottar traaden beskjeden "STOPP", og traaden
+  * avsluttes.
+  */
   @Override
   public void run(){
     try{
@@ -17,14 +24,10 @@ class Kryptograf implements Runnable{
       String dekryptertTekst;
       while(true){
         kryptert = kMonitor.taUt();
-        if(kryptert.hentInnhold().equals("STOPP")){
-          if(mode.equals("debug")){System.out.println("Stopp");
-          break;
-          }
-        }
-
+        if(kryptert.hentInnhold().equals("STOPP")){break;}
         dekryptertTekst = Kryptografi.dekrypter(kryptert.hentInnhold());
-        //if(mode.equals("debug")){System.out.printf("Dekryptert melding: %s%n", dekryptertTekst);}
+        //TODO: dMonitor.leggTil(new Melding(dekryptertTekst, kryptert.hentKanalId(), kryptert.hentSekvensNummer());
+        if(mode.equals("debug")){System.out.printf("Dekryptert melding: %s%n", dekryptertTekst);}
       }
     }catch(InterruptedException e){
       System.out.println("Kryptograf Stoppet...");

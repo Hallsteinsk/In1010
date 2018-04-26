@@ -1,5 +1,17 @@
+/** Klassen Telegrafist skal simulere en telegrafist som lytter til en kanal
+* etter krypterte meldinger. Meldinger sendes videre til en monitor hvor
+* kryptografer kan dekryptere dem.
+*
+* Denne klassen implemnterer Runnable og klassens hovedfunksjon er aa fungere
+* som en traad. Dette blir gjort med den overskrevne metoden run.
+*
+* Det er ogsaa lagt inn en "mode" variabel som ble benytter under debugging.
+* Man kan se bort ifra denne i det ferdige programmet.
+*/
+
 class Telegrafist implements Runnable{
 
+  //Private variabler
   private Kanal kanal;
   private MonitorKryptert monitor;
   private String mode;
@@ -17,18 +29,19 @@ class Telegrafist implements Runnable{
   }
 
   /** Thread-metode
+  * Denne traden lytter til telegrafisten sin kanal og lager en melding med
+  * den krypterte teksten. Meldingen legges inn i en monitor for krypterte meldinger.
+  * Nar det ikke er flere meldinger i kanalen mottar traaden null. Da legges
+  * meldingen "INGEN FLERE MELDINGER" inn i monitoren, og traaden avsluttes.
   */
   @Override
   public void run(){
     try{
       String melding = kanal.lytt();
       while(melding != null){
-        //if(mode.equals("debug")){System.out.printf("KanalID: %d, sekvensnummer: %d%n",
-        //kanalId, sekvensnummer);}
         monitor.leggTil(new Melding(melding, kanalId, sekvensnummer));
         sekvensnummer++;
         melding = kanal.lytt();
-        //if(mode.equals("debug")){Thread.sleep(500);}
       }
       monitor.leggTil(new Melding("INGEN FLERE MELDINGER", kanalId, sekvensnummer));
     }catch(InterruptedException e){

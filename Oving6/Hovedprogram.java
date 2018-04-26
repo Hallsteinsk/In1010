@@ -4,7 +4,7 @@ import java.util.ArrayList;
 class Hovedprogram{
 
   final static int ANTALL_TELEGRAFISTER = 3;
-  final static int ANTALL_KRYPTOGRAFER= 4;
+  final static int ANTALL_KRYPTOGRAFER= 5;
   static String mode;
 
   public static void main(String[] args){
