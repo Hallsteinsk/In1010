@@ -47,7 +47,7 @@ class Monitor{
     try{
       if(melding.hentInnhold().equals("INGEN FLERE MELDINGER")){aktiveTelegrafister--;}
       krypterteMeldinger.add(melding);
-      kryptertIkkeTom.signalAll();
+      kryptertIkkeTom.signal();
     }finally{
       laas.unlock();
     }
@@ -60,9 +60,8 @@ class Monitor{
   public void leggTilDekryptert(Melding melding) throws InterruptedException{
     laas.lock();
     try{
-      if(melding.hentInnhold().equals("INGEN FLERE MELDINGER")){aktiveKryptografer--;}
       dekrypterteMeldinger.add(melding);
-      dekryptertIkkeTom.signalAll();
+      dekryptertIkkeTom.signal();
     }finally{
       laas.unlock();
     }
@@ -83,11 +82,19 @@ class Monitor{
      laas.lock();
      try{
        if(tomOgIngenAktiveTelegrafister()){
+         kryptertIkkeTom.signal();
+         aktiveKryptografer--;
          return new Melding("STOPP", 0, 0);
        }else{
-          while(kryptertTom()){kryptertIkkeTom.await();}
+          while(kryptertTom()){
+            kryptertIkkeTom.await();
+            if(tomOgIngenAktiveTelegrafister()){
+              aktiveKryptografer--;
+              return new Melding("STOPP", 0, 0);
+            }
+          }
           return krypterteMeldinger.remove(0);
-       }
+          }
      }finally{
        if(mode.equals("debug")){System.out.printf("Elementer i krypterteMeldinger: %d%n", krypterteMeldinger.size());}
        laas.unlock();
@@ -103,9 +110,15 @@ class Monitor{
      laas.lock();
      try{
        if(tomOgIngenAktiveKryptografer()){
+         dekryptertIkkeTom.signal();
          return new Melding("STOPP", 0, 0);
        }else{
-         while(dekryptertTom()){dekryptertIkkeTom.await();}
+         while(dekryptertTom()){
+           dekryptertIkkeTom.await();
+           if(tomOgIngenAktiveKryptografer()){
+             return new Melding("STOPP", 0, 0);
+           }
+         }
          return dekrypterteMeldinger.remove(0);
        }
      }finally{
@@ -158,7 +171,6 @@ class Monitor{
    * er ferdige. False hvis ikke.
    */
    private boolean tomOgIngenAktiveKryptografer(){
-     if(mode.equals("debug")){System.out.printf("Aktive kryptografer: %d%n", aktiveKryptografer);}
      if(dekryptertTom() && aktiveKryptografer == 0){
        return true;
      }else{
