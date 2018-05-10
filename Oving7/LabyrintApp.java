@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -148,9 +149,11 @@ public class LabyrintApp extends Application{
     infoTekst.setFont(new Font(20));
 
     GridPane kulisser = new GridPane();
+    ScrollPane scroll = new ScrollPane();
+    scroll.setContent(lagLabyrint());
     if(labyrint != null){
       kulisser.add(infoTekst, 0, 0);
-      kulisser.add(lagLabyrint(), 0, 1);
+      kulisser.add(scroll, 0, 1);
     }else{
       infoTekst.setText("Har ingen labyrint..");
       kulisser.add(infoTekst, 0, 0);
