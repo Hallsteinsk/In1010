@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -19,6 +20,7 @@ public class LabyrintApp extends Application{
   private Labyrint labyrint;
   private Ruteknapp[][] ruteknappArray;
   private Text infoTekst;
+  private Liste<String> utveier;
 
   class Ruteknapp extends Button{
     private char tegn;
@@ -26,11 +28,11 @@ public class LabyrintApp extends Application{
     private int kol;
 
     public Ruteknapp(int rad, int kol, char tegn){
-      super(" ");
+      super();
       this.rad = rad;
       this.kol = kol;
       this.tegn = tegn;
-      this.setPrefSize(40, 40);
+      this.setPrefSize(10, 10);
 
       if(tegn == '.'){
         this.setStyle("-fx-base: #ffffff");
@@ -41,18 +43,25 @@ public class LabyrintApp extends Application{
     }
 
     public void finnUtvei(){
-      Liste<String> utveier = labyrint.finnUtveiFra(kol, rad);
-      boolean[][] besteUtvei = losningStringTilTabell(
-      utveier.hent(0), labyrint.hentKolonner(), labyrint.hentRader());
+      utveier = labyrint.finnUtveiFra(kol, rad);
+      if(utveier.stoerrelse() > 0){
+        boolean[][] besteUtvei = losningStringTilTabell(
+        utveier.hent(0), labyrint.hentKolonner(), labyrint.hentRader());
 
-      for(int r=0; r<labyrint.hentRader(); r++){
-        for(int k=0; k<labyrint.hentKolonner(); k++){
-          if(besteUtvei[r][k]){
-            ruteknappArray[r][k].settUtvei();
+        nullStillLabyrint();
+
+        for(int r=0; r<labyrint.hentRader(); r++){
+          for(int k=0; k<labyrint.hentKolonner(); k++){
+            if(besteUtvei[r][k]){
+              ruteknappArray[r][k].settUtvei();
+            }
           }
         }
+      }else{
+        nullStillLabyrint();
       }
     }
+
 
     public void settUtvei(){
       if(tegn != '#'){
@@ -64,6 +73,10 @@ public class LabyrintApp extends Application{
       if(tegn != '#'){
         this.setStyle("-fx-base: #ffffff;");
       }
+    }
+
+    public char hentTegn(){
+      return tegn;
     }
 
     /**
@@ -96,16 +109,6 @@ public class LabyrintApp extends Application{
     }
   }
 
-  /*
-  public Scene lagStartskjerm(){
-    Button velgFil = new Button("Velg labyrint");
-    Button avslutt = new Button("Avslutt");
-    GridPane knapper = new GridPane();
-    knapper.add(velgFil, 0, 0);
-    kanpper.add(avslutt, 0, 1);
-
-    return new Scene(kanpper, 400, 400);
-  }*/
 
   public GridPane lagLabyrint(){
     this.ruteknappArray = new Ruteknapp[labyrint.hentRader()][labyrint.hentKolonner()];
@@ -129,6 +132,16 @@ public class LabyrintApp extends Application{
     return rutenett;
   }
 
+  public void nullStillLabyrint(){
+    for(int i=0; i<labyrint.hentRader(); i++){
+      for(int j=0; j<labyrint.hentKolonner(); j++){
+        if(ruteknappArray[i][j].hentTegn() == '.'){
+          ruteknappArray[i][j].settHvit();
+        }
+      }
+    }
+  }
+
   public static void main(String[] args){
     launch(args);
   }
@@ -148,20 +161,21 @@ public class LabyrintApp extends Application{
     infoTekst = new Text("Trykk paa en hvit rute");
     infoTekst.setFont(new Font(20));
 
-    GridPane kulisser = new GridPane();
+    VBox vBox = new VBox();
     ScrollPane scroll = new ScrollPane();
     scroll.setContent(lagLabyrint());
+    scroll.setPrefSize(500, 750);
     if(labyrint != null){
-      kulisser.add(infoTekst, 0, 0);
-      kulisser.add(scroll, 0, 1);
+      vBox.getChildren().add(infoTekst);
+      vBox.getChildren().add(scroll);
     }else{
       infoTekst.setText("Har ingen labyrint..");
-      kulisser.add(infoTekst, 0, 0);
+      vBox.getChildren().add(infoTekst);
     }
 
 
 
-    Scene scene = new Scene(kulisser);
+    Scene scene = new Scene(vBox, 600, 800);
 
     teater.setScene(scene);
     teater.show();

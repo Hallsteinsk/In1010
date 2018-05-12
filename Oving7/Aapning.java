@@ -23,4 +23,16 @@ class Aapning extends HvitRute{
     utvei += String.format("(%d, %d)", kolonne, rad);
     labyrint.leggTilUtvei(utvei);
   }
+
+  //Her overskrives metoden finnUtvei. Dette var en bug jeg oppdaget i oblig7.
+  //Dersom man starter i en aappning vil den finne en annen vei ut, enn seg selv.
+  //Derfor overskrives metoden her slik at kun denne ruten dukker opp
+  // i utveilisten.
+  // @param Labyrint labyrint er den labyrinten utvein skal finnes fra, og motta
+  // utveilisten.
+  @Override
+  public void finnUtvei(Labyrint labyrint){
+    labyrint.leggTilUtvei(String.format("(%d, %d)", kolonne, rad));
+  }
+
 }
