@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
@@ -19,98 +20,12 @@ public class LabyrintApp extends Application{
 
   private Labyrint labyrint;
   private Ruteknapp[][] ruteknappArray;
-  private Text infoTekst;
+  private Text infoTekst, viserUtveiNr;
   private Liste<String> utveier;
+  private int utveinummer;
+  private Button neste, forrige;
 
-  class Ruteknapp extends Button{
-    private char tegn;
-    private int rad;
-    private int kol;
-
-    public Ruteknapp(int rad, int kol, char tegn){
-      super();
-      this.rad = rad;
-      this.kol = kol;
-      this.tegn = tegn;
-      this.setPrefSize(10, 10);
-
-      if(tegn == '.'){
-        this.setStyle("-fx-base: #ffffff");
-        //this.setStyle("-fx-border-color: #111111; -fx-border-width: 1px;");
-      }else if(tegn == '#'){
-        this.setStyle("-fx-base: #000000");
-      }
-    }
-
-    public void finnUtvei(){
-      utveier = labyrint.finnUtveiFra(kol, rad);
-      if(utveier.stoerrelse() > 0){
-        boolean[][] besteUtvei = losningStringTilTabell(
-        utveier.hent(0), labyrint.hentKolonner(), labyrint.hentRader());
-
-        nullStillLabyrint();
-
-        for(int r=0; r<labyrint.hentRader(); r++){
-          for(int k=0; k<labyrint.hentKolonner(); k++){
-            if(besteUtvei[r][k]){
-              ruteknappArray[r][k].settUtvei();
-            }
-          }
-        }
-      }else{
-        nullStillLabyrint();
-      }
-    }
-
-
-    public void settUtvei(){
-      if(tegn != '#'){
-        this.setStyle("-fx-base: #0000ff;");
-      }
-    }
-
-    public void settHvit(){
-      if(tegn != '#'){
-        this.setStyle("-fx-base: #ffffff;");
-      }
-    }
-
-    public char hentTegn(){
-      return tegn;
-    }
-
-    /**
-     * Konverterer losning-String fra oblig 5 til en boolean[][]-representasjon
-     * av losningstien.
-     * @param losningString String-representasjon av utveien
-     * @param bredde        bredde til labyrinten
-     * @param hoyde         hoyde til labyrinten
-     * @return              2D-representasjon av rutene der true indikerer at
-     *                      ruten er en del av utveien.
-     */
-    private boolean[][] losningStringTilTabell(String losningString, int bredde, int hoyde) {
-        boolean[][] losning = new boolean[hoyde][bredde];
-        java.util.regex.Pattern p = java.util.regex.Pattern.compile("\\(([0-9]+),([0-9]+)\\)");
-        java.util.regex.Matcher m = p.matcher(losningString.replaceAll("\\s",""));
-        while (m.find()) {
-            int x = Integer.parseInt(m.group(1));
-            int y = Integer.parseInt(m.group(2));
-            losning[y][x] = true;
-        }
-        return losning;
-    }
-
-  }
-
-  class KlikkBehandler implements EventHandler<ActionEvent>{
-    @Override
-    public void handle(ActionEvent e){
-      ((Ruteknapp)e.getSource()).finnUtvei();
-    }
-  }
-
-
-  public GridPane lagLabyrint(){
+  private GridPane lagLabyrint(){
     this.ruteknappArray = new Ruteknapp[labyrint.hentRader()][labyrint.hentKolonner()];
     String lab = labyrint.toString();
     char tegn;
@@ -124,7 +39,7 @@ public class LabyrintApp extends Application{
         rad++;
       }else{
         ruteknappArray[rad][kol] = new Ruteknapp(rad, kol, tegn);
-        ruteknappArray[rad][kol].setOnAction(new KlikkBehandler());
+        ruteknappArray[rad][kol].setOnAction(new RuteknappKlikkBehandler(this));
         rutenett.add(ruteknappArray[rad][kol], kol, rad);
         kol++;
       }
@@ -132,7 +47,17 @@ public class LabyrintApp extends Application{
     return rutenett;
   }
 
+  private HBox lagNextPrev(){
+    neste = new Button(">");
+    forrige = new Button("<");
+    viserUtveiNr = new Text(" ");
+    HBox hBox = new HBox(20);
+    hBox.getChildren().addAll(forrige, viserUtveiNr, neste);
+    return hBox;
+  }
+
   public void nullStillLabyrint(){
+    infoTekst.setText("Trykk paa en hvit rute");
     for(int i=0; i<labyrint.hentRader(); i++){
       for(int j=0; j<labyrint.hentKolonner(); j++){
         if(ruteknappArray[i][j].hentTegn() == '.'){
@@ -140,6 +65,53 @@ public class LabyrintApp extends Application{
         }
       }
     }
+  }
+
+  public void finnUtvei(int rad, int kol){
+    utveier = labyrint.finnUtveiFra(kol, rad);
+    if(utveier.stoerrelse() > 0){
+      utveinummer = 0;
+      visUtvei();
+      infoTekst.setText(String.format("Viser utvei fra (%d, %d)", kol, rad));
+      viserUtveiNr.setText(String.format("Utvei nr %d av %d", utveinummer+1, utveier.stoerrelse()));
+    }else{
+      nullStillLabyrint();
+      infoTekst.setText(String.format("Ingen utvei fra (%d, %d), =(", kol, rad));
+    }
+  }
+
+  private void visUtvei(){
+    boolean[][] utvei = losningStringTilTabell(
+    utveier.hent(utveinummer), labyrint.hentKolonner(), labyrint.hentRader());
+    nullStillLabyrint();
+    for(int r=0; r<labyrint.hentRader(); r++){
+      for(int k=0; k<labyrint.hentKolonner(); k++){
+        if(utvei[r][k]){
+          ruteknappArray[r][k].settBlaa();
+        }
+      }
+    }
+  }
+
+  /**
+   * Konverterer losning-String fra oblig 5 til en boolean[][]-representasjon
+   * av losningstien.
+   * @param losningString String-representasjon av utveien
+   * @param bredde        bredde til labyrinten
+   * @param hoyde         hoyde til labyrinten
+   * @return              2D-representasjon av rutene der true indikerer at
+   *                      ruten er en del av utveien.
+   */
+  private boolean[][] losningStringTilTabell(String losningString, int bredde, int hoyde) {
+      boolean[][] losning = new boolean[hoyde][bredde];
+      java.util.regex.Pattern p = java.util.regex.Pattern.compile("\\(([0-9]+),([0-9]+)\\)");
+      java.util.regex.Matcher m = p.matcher(losningString.replaceAll("\\s",""));
+      while (m.find()) {
+          int x = Integer.parseInt(m.group(1));
+          int y = Integer.parseInt(m.group(2));
+          losning[y][x] = true;
+      }
+      return losning;
   }
 
   public static void main(String[] args){
@@ -167,6 +139,7 @@ public class LabyrintApp extends Application{
     scroll.setPrefSize(500, 750);
     if(labyrint != null){
       vBox.getChildren().add(infoTekst);
+      vBox.getChildren().add(lagNextPrev());
       vBox.getChildren().add(scroll);
     }else{
       infoTekst.setText("Har ingen labyrint..");
