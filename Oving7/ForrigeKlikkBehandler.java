@@ -1,3 +1,7 @@
+/*EventHandler som haandterer at man trykker paa forrige-knappen.
+Den benytter seg av visForrige-metoden til LabyrintAppen dem tilhører.
+*/
+
 import javafx.event.*;
 
 class ForrigeKlikkBehandler implements EventHandler<ActionEvent>{

@@ -172,8 +172,8 @@ public class LabyrintApp extends Application{
   /*LabyrintAppen sin start-metode. Her bygges alle elementer inn i en vertikal
   * boks. Oeverst er det en liten beskjed til bruker, saa kommer
   * previous/next-funksjonaliteten. Til slutt vises labyrintetn i en ScrollPane.
-  * VBoxen settes inn i en scene som har dimensjoner 600x800 piksler. Store
-  * labyrinter faar ikke plass her, saa man maa scrolle for aa se alt innholdet.
+  * VBoxen settes inn i en scene. Store labyrinter faar ikke plass her,
+  * saa man maa scrolle for aa se alt innholdet.
   * @param Stage teater er Stagen som skal vises frem.
   */
   public void start(Stage teater){
@@ -194,19 +194,18 @@ public class LabyrintApp extends Application{
 
     VBox vBox = new VBox();
     ScrollPane scroll = new ScrollPane();
-    scroll.setContent(lagLabyrint());
-    scroll.setPrefSize(500, 750);
     if(labyrint != null){
       vBox.getChildren().add(infoTekst);
       vBox.getChildren().add(lagNextPrev());
+      scroll.setContent(lagLabyrint());
       vBox.getChildren().add(scroll);
     }else{
-      infoTekst.setText("Har ingen labyrint..");
+      infoTekst.setText("Har ingen labyrint...");
       vBox.getChildren().add(infoTekst);
     }
 
     //Legger inn VBox i scenen, og scenen i teater.
-    Scene scene = new Scene(vBox, 600, 800);
+    Scene scene = new Scene(vBox);
     teater.setScene(scene);
     teater.show();
   }

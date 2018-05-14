@@ -1,3 +1,9 @@
+/*Denne EventHandleren trigges naar en rutekanpp trykkes inn. Da skal
+utveiene fra den aktuelle knappen vises. Her hentes kolonne og rad fra
+ruteknappen og saa kalles finnUtvei i labrintAppen.
+Trykker man paa en sort knapp skal labyrinten nullstilles.
+*/
+
 import javafx.event.*;
 
 class RuteknappKlikkBehandler implements EventHandler<ActionEvent>{
