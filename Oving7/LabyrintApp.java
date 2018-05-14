@@ -1,3 +1,4 @@
+//Imports
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ import java.io.FileNotFoundException;
 
 public class LabyrintApp extends Application{
 
+  //Variabler og objekter som er globalt tilgjengelig inne i LabyrintAppen
   private Labyrint labyrint;
   private Ruteknapp[][] ruteknappArray;
   private Text infoTekst, viserUtveiNr;
@@ -25,6 +27,14 @@ public class LabyrintApp extends Application{
   private int utveinummer;
   private Button neste, forrige;
 
+
+  //Metoder som hjelper til med aa sette opp layout og lager fx-objekter.
+
+  /** Metode som lager et grid pane med alle ruteknappene til labyrinten.
+  * Det legges en referanse til hverruteknappe inn i arrayet ruteknappArray.
+  * Alle ruteknapper blir knyttet til en klikkbehandler.
+  * @return GridPane som inneholder alle ruteknappene.
+  */
   private GridPane lagLabyrint(){
     this.ruteknappArray = new Ruteknapp[labyrint.hentRader()][labyrint.hentKolonner()];
     String lab = labyrint.toString();
@@ -32,6 +42,7 @@ public class LabyrintApp extends Application{
     GridPane rutenett = new GridPane();
     int rad = 0, kol = 0;
     rutenett.setGridLinesVisible(true);
+    RuteknappKlikkBehandler ruteklikk = new RuteknappKlikkBehandler(this);
     for(int i=0; i<lab.length(); i++){
       tegn = lab.charAt(i);
       if(tegn == '\n'){
@@ -39,7 +50,7 @@ public class LabyrintApp extends Application{
         rad++;
       }else{
         ruteknappArray[rad][kol] = new Ruteknapp(rad, kol, tegn);
-        ruteknappArray[rad][kol].setOnAction(new RuteknappKlikkBehandler(this));
+        ruteknappArray[rad][kol].setOnAction(ruteklikk);
         rutenett.add(ruteknappArray[rad][kol], kol, rad);
         kol++;
       }
@@ -47,43 +58,53 @@ public class LabyrintApp extends Application{
     return rutenett;
   }
 
+  /** Metode som setter opp en horisontal boks med to knapper som fungerer som
+  * 'next' og 'previous', samt en tekst som indikerer hvor mange utveier det finnes
+  * og hvilken som vises naa.
+  * Knappene blir satt opp med hver sin klikkbehandler.
+  * @return HBox som inneholder to knapper og informasjon om hvilken utvei som vises.
+  */
   private HBox lagNextPrev(){
     neste = new Button(">");
+    neste.setOnAction(new NesteKlikkBehandler(this));
     forrige = new Button("<");
+    forrige.setOnAction(new ForrigeKlikkBehandler(this));
     viserUtveiNr = new Text(" ");
     HBox hBox = new HBox(20);
     hBox.getChildren().addAll(forrige, viserUtveiNr, neste);
     return hBox;
   }
 
-  public void nullStillLabyrint(){
-    infoTekst.setText("Trykk paa en hvit rute");
-    for(int i=0; i<labyrint.hentRader(); i++){
-      for(int j=0; j<labyrint.hentKolonner(); j++){
-        if(ruteknappArray[i][j].hentTegn() == '.'){
-          ruteknappArray[i][j].settHvit();
-        }
-      }
-    }
-  }
 
+  //Metoder som benyttes for aa tekne opp og fjerne utveier.
+
+  /* Metode som finner og viser utvei fra en ruteknapp. Denne blir aktivert
+  * av en klikkbehandler.
+  * @param int rad er raden til ruteknappen man skal finne utvei fra
+  * @param int kol er kolonnen til ruteknappen man skal finne utvei fra.
+  */
   public void finnUtvei(int rad, int kol){
     utveier = labyrint.finnUtveiFra(kol, rad);
     if(utveier.stoerrelse() > 0){
       utveinummer = 0;
       visUtvei();
       infoTekst.setText(String.format("Viser utvei fra (%d, %d)", kol, rad));
-      viserUtveiNr.setText(String.format("Utvei nr %d av %d", utveinummer+1, utveier.stoerrelse()));
     }else{
       nullStillLabyrint();
       infoTekst.setText(String.format("Ingen utvei fra (%d, %d), =(", kol, rad));
     }
   }
 
+  /* Hjelpemetode som viser utveien som ligger med indeks 'utveinummer'.
+  * Her benyttes "losningStringTilTabell" for aa generere et array for aa
+  * representere en utvei. Dersom man oensker aa se en annen utvei endrer man
+  * indeksen 'utveinummer'
+  */
   private void visUtvei(){
     boolean[][] utvei = losningStringTilTabell(
     utveier.hent(utveinummer), labyrint.hentKolonner(), labyrint.hentRader());
     nullStillLabyrint();
+    viserUtveiNr.setText(String.format("Utvei nr %d av %d", utveinummer+1, utveier.stoerrelse()));
     for(int r=0; r<labyrint.hentRader(); r++){
       for(int k=0; k<labyrint.hentKolonner(); k++){
         if(utvei[r][k]){
@@ -96,6 +117,9 @@ public class LabyrintApp extends Application{
   /**
    * Konverterer losning-String fra oblig 5 til en boolean[][]-representasjon
    * av losningstien.
+   * Denne metoden er hentet fra In1010 vaar 2018 sine nettsider. Den var vedlagt
+   * som et forslag til en maaate aa loese oppgavene paa. Jeg copy/pastet den
+   * inn her.
    * @param losningString String-representasjon av utveien
    * @param bredde        bredde til labyrinten
    * @param hoyde         hoyde til labyrinten
@@ -114,12 +138,47 @@ public class LabyrintApp extends Application{
       return losning;
   }
 
-  public static void main(String[] args){
-    launch(args);
+  /*Metode som "resetter" labyrinten. Dvs at alle utveier fjernes, og hvite
+  * ruter settes tilbake til hvit.
+  */
+  public void nullStillLabyrint(){
+    infoTekst.setText("Trykk paa en hvit rute");
+    viserUtveiNr.setText("                 ");
+    for(int i=0; i<labyrint.hentRader(); i++){
+      for(int j=0; j<labyrint.hentKolonner(); j++){
+        if(ruteknappArray[i][j].hentTegn() == '.'){
+          ruteknappArray[i][j].settHvit();
+        }
+      }
+    }
   }
 
+  //Metode som viser den forrige utveien
+  public void visForrige(){
+    if(utveinummer > 0){
+      utveinummer--;
+      visUtvei();
+    }
+  }
+
+  //Metode som viser den neste utveien
+  public void visNeste(){
+    if(utveinummer < utveier.stoerrelse() - 1){
+      utveinummer++;
+      visUtvei();
+    }
+  }
+
+  /*LabyrintAppen sin start-metode. Her bygges alle elementer inn i en vertikal
+  * boks. Oeverst er det en liten beskjed til bruker, saa kommer
+  * previous/next-funksjonaliteten. Til slutt vises labyrintetn i en ScrollPane.
+  * VBoxen settes inn i en scene som har dimensjoner 600x800 piksler. Store
+  * labyrinter faar ikke plass her, saa man maa scrolle for aa se alt innholdet.
+  * @param Stage teater er Stagen som skal vises frem.
+  */
   public void start(Stage teater){
 
+    //Starter med aa la bruker velge labyrintfil i filvelger.
     File labyrintFil = new FileChooser().showOpenDialog(teater);
     if(labyrintFil != null){
       try{
@@ -129,7 +188,7 @@ public class LabyrintApp extends Application{
       }
     }
 
-
+    //BYgger opp en VBox med alle elementene til applikasjonen.
     infoTekst = new Text("Trykk paa en hvit rute");
     infoTekst.setFont(new Font(20));
 
@@ -146,11 +205,15 @@ public class LabyrintApp extends Application{
       vBox.getChildren().add(infoTekst);
     }
 
-
-
+    //Legger inn VBox i scenen, og scenen i teater.
     Scene scene = new Scene(vBox, 600, 800);
-
     teater.setScene(scene);
     teater.show();
   }
+
+  //Main
+  public static void main(String[] args){
+    launch(args);
+  }
+
 }

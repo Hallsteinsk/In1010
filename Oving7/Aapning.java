@@ -33,6 +33,7 @@ class Aapning extends HvitRute{
   @Override
   public void finnUtvei(Labyrint labyrint){
     labyrint.leggTilUtvei(String.format("(%d, %d)", kolonne, rad));
+    super.finnUtvei(labyrint);
   }
 
 }
